@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 
-export function OneOfGuards(
+export function NoneOfGuards(
   guardsRefs: Type<CanActivate>[],
 ): Type<CanActivate> {
   @Injectable()

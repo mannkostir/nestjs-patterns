@@ -7,6 +7,8 @@ import {
 } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 
+// Returns true if one of CanActivate collection returns true
+
 export function OneOfGuards(
   guardsRefs: Type<CanActivate>[],
 ): Type<CanActivate> {

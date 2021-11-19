@@ -1,6 +1,8 @@
 import {
   CanActivate,
   ExecutionContext,
+  ForbiddenException,
+  HttpException,
   Injectable,
   OnModuleInit,
   Type,
@@ -12,12 +14,17 @@ import { ModuleRef } from '@nestjs/core';
  * @example -@UseGuards(OneOfGuards(GuardA, GuardB), GuardC)
  * */
 
+ type Options = {
+  message?: string;
+};
+
 export function OneOfGuards(
   guardsRefs: Type<CanActivate>[],
+  options: Options = {},
 ): Type<CanActivate> {
   @Injectable()
   class SuperGuard implements CanActivate, OnModuleInit {
-    private guards: CanActivate[];
+    private guards: CanActivate[] = [];
 
     constructor(private readonly moduleRef: ModuleRef) {}
 
@@ -31,20 +38,28 @@ export function OneOfGuards(
           } catch {
             guard = await this.moduleRef.create(guardRef);
           }
-
+          
           return guard;
         }),
       );
     }
 
     async canActivate(context: ExecutionContext) {
-      for await (const guard of this.guards) {
-        const canActivate = await guard.canActivate(context);
+      const exceptions: HttpException[] = []
 
-        if (canActivate) return true;
+      for await (const guard of this.guards) {
+        try {
+          const canActivate = await guard.canActivate(context);
+
+          if (!canActivate) throw new ForbiddenException();
+
+          return true;
+        } catch (err) {
+          exceptions.push(err);
+        }
       }
 
-      return false;
+      throw new ForbiddenException(options.message);
     }
   }
 

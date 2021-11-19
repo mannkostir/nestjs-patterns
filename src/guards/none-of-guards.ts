@@ -8,6 +8,7 @@ import {
 import { ModuleRef } from '@nestjs/core';
 
 // Returns true if every item of CanActivate collection returns false
+// Just for fun, illustrates principle
 
 export function NoneOfGuards(
   guardsRefs: Type<CanActivate>[],

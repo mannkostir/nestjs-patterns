@@ -4,6 +4,7 @@ import {
   Injectable,
   OnModuleInit,
   Type,
+  UseGuards,
 } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 

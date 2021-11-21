@@ -9,15 +9,14 @@ import {
 } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 
-/**
- * @description Returns true if one of CanActivate collection returns true
- * @example -@UseGuards(OneOfGuards(GuardA, GuardB), GuardC)
- * */
-
  type Options = {
   message?: string;
 };
 
+/**
+ * @description Returns true if one of CanActivate collection returns true
+ * @example -@UseGuards(OneOfGuards(GuardA, GuardB), GuardC)
+ * */
 export function OneOfGuards(
   guardsRefs: Type<CanActivate>[],
   options: Options = {},
